@@ -13,9 +13,8 @@ import (
 var DB_URL = os.Getenv("INSTAGRAM_DB")
 var DB_PASS = os.Getenv("INSTAGRAM_DB_PASS")
 
-func insertRelations(relationship string, users []string) {
+func insertRelations(relationship string, users []string, updateTime time.Time) {
 	connection_url := fmt.Sprintf("root:%v@tcp(%v:3306)/instagram_statistics", DB_PASS, DB_URL)
-	updateTime := time.Now()
 
 	db, err := sql.Open("mysql", connection_url)
 	if err != nil {

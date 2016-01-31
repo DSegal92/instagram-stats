@@ -47,11 +47,13 @@ func collectUsers(relation string) []string {
 }
 
 func main() {
+	updateTime := time.Now()
+
 	follows := collectUsers("follows")
-	insertRelations("follows", follows)
+	insertRelations("follows", follows, updateTime)
 
 	followers := collectUsers("followed-by")
-	insertRelations("followers", followers)
+	insertRelations("followers", followers, updateTime)
 }
 
 func getContent(url string) []byte {
