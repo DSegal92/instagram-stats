@@ -19,13 +19,12 @@ type Follows struct {
 	}
 }
 
-func main() {
+func collectUsers(relation string) []string {
 	cursor := ""
-
-	follows := make([]string, 0)
+	users := make([]string, 0)
 
 	for {
-		url := fmt.Sprintf("https://api.instagram.com/v1/users/self/follows?access_token=%v&cursor=%v", ACCESS_TOKEN, cursor)
+		url := fmt.Sprintf("https://api.instagram.com/v1/users/self/%v?access_token=%v&cursor=%v", relation, ACCESS_TOKEN, cursor)
 		content := getContent(url)
 
 		var record Follows
@@ -35,7 +34,7 @@ func main() {
 		}
 
 		for i := 0; i < len(record.Data); i++ {
-			follows = append(follows, record.Data[i].Username)
+			users = append(users, record.Data[i].Username)
 		}
 
 		if record.Pagination.NextCursor == "" {
@@ -44,10 +43,15 @@ func main() {
 		cursor = record.Pagination.NextCursor
 	}
 
-	insertFollows(follows)
-	// for i := 0; i < len(follows); i++ {
-	// 	fmt.Println(follows[i])
-	// }
+	return users
+}
+
+func main() {
+	follows := collectUsers("follows")
+	insertRelations("follows", follows)
+
+	followers := collectUsers("followed-by")
+	insertRelations("followers", followers)
 }
 
 func getContent(url string) []byte {
