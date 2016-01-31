@@ -44,9 +44,10 @@ func main() {
 		cursor = record.Pagination.NextCursor
 	}
 
-	for i := 0; i < len(follows); i++ {
-		fmt.Println(follows[i])
-	}
+	insertFollows(follows)
+	// for i := 0; i < len(follows); i++ {
+	// 	fmt.Println(follows[i])
+	// }
 }
 
 func getContent(url string) []byte {
