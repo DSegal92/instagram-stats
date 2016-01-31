@@ -44,3 +44,30 @@ func insertRelations(relationship string, users []string, updateTime time.Time) 
 		_, err = stmtIns.Exec(users[i], updateTime, updateTime)
 	}
 }
+
+func updateStatistics(follows int, followers int, updateTime time.Time) {
+	connection_url := fmt.Sprintf("root:%v@tcp(%v:3306)/instagram_statistics", DB_PASS, DB_URL)
+
+	db, err := sql.Open("mysql", connection_url)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	insert_statement := fmt.Sprintf(`INSERT INTO Statistics (id, date, follows, followers)
+																	VALUES (null, ?, ?, ?)`)
+	stmtIns, err := db.Prepare(insert_statement)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer stmtIns.Close()
+
+	_, err = stmtIns.Exec(updateTime, follows, followers)
+}

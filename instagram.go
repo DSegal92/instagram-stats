@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"time"
 )
 
 var ACCESS_TOKEN = os.Getenv("INSTAGRAM_ACCESS_KEY")
@@ -54,6 +55,8 @@ func main() {
 
 	followers := collectUsers("followed-by")
 	insertRelations("followers", followers, updateTime)
+
+	updateStatistics(len(follows), len(followers), updateTime)
 }
 
 func getContent(url string) []byte {
